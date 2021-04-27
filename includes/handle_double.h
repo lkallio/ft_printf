@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_double.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkallio <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lkallio <lkallio@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 12:51:51 by lkallio           #+#    #+#             */
-/*   Updated: 2020/01/15 14:07:28 by lkallio          ###   ########.fr       */
+/*   Updated: 2021/04/14 17:11:03 by lkallio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,34 +15,28 @@
 
 # include "ft_printf.h"
 
-# define DBL_POS_EXP		dbl->data[0]
-# define DBL_BASE			dbl->data[1]
-# define DBL_NEG_EXP		dbl->data[2]
-# define DBL_BOOLEAN		dbl->data[3]
-# define DBL_MTS_LEN		dbl->data[4]
-# define DBL_WHL_LEN		dbl->data[5]
+typedef struct s_dbl_dt
+{
+	int				base;
+	int				opt;
+	int				pos_exp;
+	int				neg_exp;
+	int				boolean;
+	int				mts_len;
+	int				whl_len;
+}	t_dbl_dt;
 
-# define DBL_IS_NG			(dbl->data[3] & 1)
-# define DBL_IS_SCI			(dbl->data[3] & (1 << 1))
-# define DBL_NOTRAIL		(dbl->data[3] & (1 << 2))
-# define DBL_IS_READJ		(dbl->data[3] & (1 << 3))
-# define DBL_IS_HEX			(dbl->data[3] & (1 << 4))
-
-typedef struct				s_dbl
+typedef struct s_dbl
 {
 	long double				in[2];
-	int						data[6];
+	t_dbl_dt				dt;
 	char					*whole;
 	char					*mantissa;
-}							t_dbl;
+}	t_dbl;
 
-# define DBL_WHL			(dbl->in[0])
-# define DBL_MTS			(dbl->in[1])
-# define DBL_WHL_STR		(dbl->whole)
-# define DBL_MTS_STR		(dbl->mantissa)
-
-void			dbl_get_data(t_pf *pf, t_dbl *dbl);
-void			write_dbl(t_pf *pf, t_dbl *dbl);
-int				dbl_hex_char(t_pf *pf, t_dbl *dbl, int num);
+void						dbl_get_data(t_pf *pf, t_dbl *dbl);
+void						write_dbl(t_pf *pf, t_dbl *dbl);
+int							dbl_hex_char(t_pf *pf, t_dbl *dbl, int num);
+int							handle_double(t_pf *pf, va_list ap);
 
 #endif

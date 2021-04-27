@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lkallio <lkallio@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lkallio <lkallio@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 12:51:48 by lkallio           #+#    #+#             */
-/*   Updated: 2020/02/12 09:48:12 by lkallio          ###   ########.fr       */
+/*   Updated: 2021/04/27 19:30:30 by lkallio          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,22 @@
 # include <string.h>
 # include <inttypes.h>
 # include <stdlib.h>
+# include <sys/errno.h>
 
-# define PARAMETER	pf->dt[0]
-# define WIDTH		pf->dt[1]
-# define PRECISION	pf->dt[2]
-# define LENGTH		pf->dt[3]
-# define TYPE		pf->dt[4]
-# define NUM_LEN	pf->dt[5]
-# define PRC_COPY	pf->dt[6]
-# define WDT_COPY	pf->dt[7]
-# define IS_ZERO	pf->dt[8]
-
-# define NG_FLAG	pf->dt[0] & 1
-# define PLUS_FLAG	pf->dt[0] & (1 << 1)
-# define SPACE_FLAG	pf->dt[0] & (1 << 2)
-# define ZERO_FLAG	pf->dt[0] & (1 << 3)
-# define HASH_FLAG	pf->dt[0] & (1 << 4)
-
-typedef struct		s_pf
+typedef struct s_dt
 {
-	int				dt[9];
+	int		param;
+	int		width;
+	int		prec;
+	int		length;
+	int		type;
+	int		num_len;
+	int		temp;
+}					t_dt;
+
+typedef struct s_pf
+{
+	t_dt			dt;
 	char			buf[1024];
 	int				buf_idx;
 	int				n;
@@ -47,9 +43,9 @@ typedef struct		s_pf
 
 int					handle_double(t_pf *pf, va_list ap);
 void				feedbuf_nchar(t_pf *pf, char ins, int n);
-void				feedbuf_str(t_pf *pf, char *str);
+void				feedbuf_str(t_pf *pf, char *str, int len);
 void				handle_buffer(t_pf *pf, char ins);
-int					write_int(uintmax_t in, t_pf *pf, int base);
+int					write_int(uintmax_t in, t_pf *pf, int base, int i);
 int					ft_nstrchr(const char *pool, char c);
 int					handle_str(t_pf *pf, va_list ap);
 int					handle_uint(t_pf *pf, va_list ap);
@@ -60,5 +56,11 @@ int					handle_n(t_pf *pf, va_list ap);
 int					ft_nstrchr(const char *pool, char c);
 int					pf_atoi(t_pf *pf, int *i, int ret);
 int					handle_c(t_pf *pf, va_list ap);
+int					handle_percent(t_pf *pf);
+int					handle_longints(t_pf *pf, va_list ap);
+int					ft_itrn(int arg, int ret1, int ret2);
+int					ft_intass(int *ass, int dst);
+size_t				ft_strlen(const char *str);
+char				*ft_stern(int true, char *s1, char *s2);
 
 #endif
